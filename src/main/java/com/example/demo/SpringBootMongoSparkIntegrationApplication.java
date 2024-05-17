@@ -27,7 +27,7 @@ public class SpringBootMongoSparkIntegrationApplication {
 		.option("spark.mongodb.read.database", "CAT_TRADING")
 		.option("spark.mongodb.read.collection", "EnrichedInquiry")
 		.option("spark.mongodb.read.connection.uri", "mongodb://localhost:27017").load();
-		dataframe.toDF().show();
+		//dataframe.toDF().show();
 	}
 
 }
