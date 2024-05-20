@@ -58,6 +58,11 @@
 			<artifactId>spark-sql_2.12</artifactId>
 			<version>3.3.1</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+		</dependency>
 		
 		<dependency>
 			<groupId>com.hazelcast</groupId>
@@ -96,6 +101,11 @@
 			<artifactId>commons-compiler</artifactId>
 			<version>3.0.8</version>
 		</dependency>
+		<!-- <dependency>
+			<groupId>com.example</groupId>
+			<artifactId>spark-integration</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency> -->
 		<dependency>
 			<groupId>org.codehaus.janino</groupId>
 			<artifactId>janino</artifactId>

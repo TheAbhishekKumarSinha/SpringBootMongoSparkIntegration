@@ -2,8 +2,10 @@ package com.example.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.kafka.producers.KafkaProducers;
 import com.example.pojo.StockItem;
 import com.example.repositories.StockRepository;
+import com.example.request.SparkRequest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,6 +15,7 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
@@ -30,6 +33,18 @@ public class StockItemRestController {
     
     @Autowired
     private StockRepository stockRepository;
+
+    @Autowired
+    private KafkaProducers messageProducer;
+
+    @GetMapping("/send")
+    public String sendMessage(@RequestParam("message") String message) {
+        SparkRequest sparkRequest = new SparkRequest();
+        sparkRequest.setCollectionName("Part2: Collection");
+        sparkRequest.setDatabaseName("Part2: Database");
+        messageProducer.sendToKafka(sparkRequest);
+        return "Message sent: " + message;
+    }
 
     @GetMapping("/stockItems")
     public List<StockItem> getAllStockItems() {
