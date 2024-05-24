@@ -1,6 +1,8 @@
 package com.example.kafka.consumers;
 
+import com.example.request.SparkRequest;
+
 public interface IKafkaConsumers {
 
-    public void listen(String message);
+    public void listen(SparkRequest request);
 }
