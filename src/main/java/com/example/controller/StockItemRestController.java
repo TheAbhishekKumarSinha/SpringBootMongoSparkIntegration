@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.kafka.producers.KafkaProducers;
 import com.example.pojo.StockItem;
 import com.example.repositories.StockRepository;
-import com.example.request.SparkRequest;
+import com.example.spark.request.SparkRequest;
 
 import java.util.ArrayList;
 import java.util.Arrays;

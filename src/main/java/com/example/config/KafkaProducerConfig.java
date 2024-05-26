@@ -12,7 +12,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
-import com.example.request.SparkRequest;
+import com.example.spark.request.SparkRequest;
 
 
 @Configuration

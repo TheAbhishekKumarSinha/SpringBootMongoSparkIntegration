@@ -1,6 +1,6 @@
 package com.example.kafka.consumers;
 
-import com.example.request.SparkRequest;
+import com.example.spark.request.SparkRequest;
 
 public interface IKafkaConsumers {
 

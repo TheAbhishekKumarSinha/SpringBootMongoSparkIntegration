@@ -3,7 +3,7 @@ package com.example.kafka.consumers;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import com.example.request.SparkRequest;
+import com.example.spark.request.SparkRequest;
 
 
 @Component

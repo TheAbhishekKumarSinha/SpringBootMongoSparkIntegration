@@ -1,6 +1,6 @@
 package com.example.kafka.producers;
 
-import com.example.request.SparkRequest;
+import com.example.spark.request.SparkRequest;
 
 public interface IKafkaProducers {
 
