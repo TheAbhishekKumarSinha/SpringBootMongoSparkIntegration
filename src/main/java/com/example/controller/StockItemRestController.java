@@ -2,8 +2,10 @@ package com.example.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.kafka.producers.KafkaProducers;
 import com.example.pojo.StockItem;
 import com.example.repositories.StockRepository;
+import com.example.spark.request.SparkRequest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,9 +15,8 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
@@ -33,6 +34,18 @@ public class StockItemRestController {
     @Autowired
     private StockRepository stockRepository;
 
+    @Autowired
+    private KafkaProducers messageProducer;
+
+    @GetMapping("/send")
+    public String sendMessage(@RequestParam("message") String message) {
+        SparkRequest sparkRequest = new SparkRequest();
+        sparkRequest.setCollectionName("Part2: Collection");
+        sparkRequest.setDatabaseName("Part2: Database");
+        messageProducer.sendToKafka(sparkRequest);
+        return "Message sent: " + message;
+    }
+
     @GetMapping("/stockItems")
     public List<StockItem> getAllStockItems() {
         return stockRepository.findAll();
@@ -43,35 +56,67 @@ public class StockItemRestController {
         return stockRepository.findByTicker(ticker);
     } 
 
+    @GetMapping("/updateStockItem")
+    public void updateStockItem() {
+        
+        stockRepository.findAll().stream().forEach(s -> {
+            //stockRepository.save(updateStockItem(s));
+        });
+        
+    }
+
     @GetMapping("/addStockItem")
     public void addStockItem() {
         
-        // for(int i=0; i<1000;i++){
-        //     StockItem item = getStockItem();
-        //     //stockRepository.save(item);
-        // }
+            StockItem item = getStockItem();
+            stockRepository.save(item);
         
+    }
+
+    @GetMapping("/getAllTickers")
+    public List<String> getAllTickerValues() {
+        
+        Random random = new Random();
+        List<String> tickerList = get20Ticker(random);
+        List<String> isinList = get20Isin(random);
+        stockRepository.findAll().forEach(s->{
+            String oldTicker = s.getTicker();
+            s.setTicker(tickerList.get(random.nextInt(tickerList.size())));
+            s.setIsin(isinList.get(random.nextInt(isinList.size())));
+            s.setDescription(s.getDescription().replace(oldTicker, s.getTicker()));
+            //stockRepository.save(s);
+        });
+
+        return tickerList;
     }
 
     private StockItem getStockItem() {
         Random random = new Random();
         String ticker = getRandomString(8, random);
         StockItem  stockItem = StockItem.builder()
-        .buySellFlag(this.buySellFlagList.get(random.nextInt(buySellFlagList.size()-1)))
+        .buySellFlag(this.buySellFlagList.get(random.nextInt(buySellFlagList.size())))
         .quantity(random.nextDouble(1000, 10000000))
-        .scbDirection(this.buySellFlagList.get(random.nextInt(buySellFlagList.size()-1)))
+        .scbDirection(this.buySellFlagList.get(random.nextInt(buySellFlagList.size())))
         .quantityUsd(random.nextDouble(1000, 100000))
         .creationdateinutc(random.nextLong(1672531200000L, 1715945878969L))
-        .included(this.includedList.get(random.nextInt(includedList.size()-1)))
-        .portfolio(this.portFolioList.get(random.nextInt(portFolioList.size()-1)))
-        .desk(this.deskList.get(random.nextInt(deskList.size()-1)))
-        .cusip(""+randomString.charAt(random.nextInt(randomString.length()-1))+randomString.charAt(random.nextInt(randomString.length()-1))+random.nextInt(10000,99999))
+        .included(this.includedList.get(random.nextInt(includedList.size())))
+        .portfolio(this.portFolioList.get(random.nextInt(portFolioList.size())))
+        .desk(this.deskList.get(random.nextInt(deskList.size())))
+        .cusip(""+randomString.charAt(random.nextInt(randomString.length()))+randomString.charAt(random.nextInt(randomString.length()))+random.nextInt(10000,99999))
         .ticker(ticker)
         .description(ticker + " "+ random.nextInt(10)+ "/"+ random.nextInt(10) +" "+ random.nextInt(29)+ "/" +random.nextInt(12) + "/" +random.nextInt(23))
         .isin(getRandomString(2, random)+random.nextInt(10000000,99999999))
 
         .build();
 
+        return stockItem;
+    }
+
+    private StockItem updateStockItem(StockItem stockItem) {
+        Random random = new Random();
+        stockItem.setBuySellFlag(this.buySellFlagList.get(random.nextInt(buySellFlagList.size())));
+        stockItem.setScbDirection(this.buySellFlagList.get(random.nextInt(buySellFlagList.size())));
+        stockItem.setDesk(this.deskList.get(random.nextInt(deskList.size())));
         return stockItem;
     }
 
@@ -84,4 +129,24 @@ public class StockItemRestController {
 
         return stringBuilder.toString();
     } 
+
+    private List<String> get20Ticker(Random random){
+        ArrayList<String> list = new ArrayList<String>();
+        for(int i=0; i< 20;i++){
+            list.add(getRandomString(8, random));
+        }
+
+        return list;
+        
+    }
+
+    private List<String> get20Isin(Random random){
+        ArrayList<String> list = new ArrayList<String>();
+        for(int i=0; i< 20;i++){
+            list.add(getRandomString(2, random)+random.nextInt(10000000,99999999));
+        }
+
+        return list;
+        
+    }
 }
