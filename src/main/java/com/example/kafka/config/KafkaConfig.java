@@ -13,5 +13,10 @@ public class KafkaConfig {
     public KafkaAdmin.NewTopics topics(){
         return new NewTopics(TopicBuilder.name("spark-channel").build() );
     }
+
+    @Bean
+    public KafkaAdmin.NewTopics topicResponse(){
+        return new NewTopics(TopicBuilder.name("spark-channel-response").build() );
+    }
     
 }

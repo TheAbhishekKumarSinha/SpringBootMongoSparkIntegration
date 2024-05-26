@@ -15,7 +15,7 @@ public class KafkaConsumers implements IKafkaConsumers {
         System.out.println("Received message: " + message);
     }
 
-    @KafkaListener(topics = "spark-channel", groupId = "my-group-id")
+    @KafkaListener(topics = "spark-channel-response", groupId = "my-group-id2")
     public void listen(SparkResponse message) {
         System.out.println("Received message: " + message);
     }
