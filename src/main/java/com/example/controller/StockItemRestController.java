@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class StockItemRestController {
 
     private final List<String> buySellFlagList = Arrays.asList("B", "S");
-    private final List<String> tenorList = Arrays.asList("1Y", "2Y", "3Y", "4Y", "5Y", "6Y", "7Y", "8Y", "9Y");
+    //private final List<String> tenorList = Arrays.asList("1Y", "2Y", "3Y", "4Y", "5Y", "6Y", "7Y", "8Y", "9Y");
     private final List<String> deskList = Arrays.asList("CREDIT","RATES");
     private final List<String> includedList = Arrays.asList("Y","N");
     private final String randomString = "QWERTYUIOPASDFGHJKLZXCVBNM";
@@ -112,13 +112,13 @@ public class StockItemRestController {
         return stockItem;
     }
 
-    private StockItem updateStockItem(StockItem stockItem) {
-        Random random = new Random();
-        stockItem.setBuySellFlag(this.buySellFlagList.get(random.nextInt(buySellFlagList.size())));
-        stockItem.setScbDirection(this.buySellFlagList.get(random.nextInt(buySellFlagList.size())));
-        stockItem.setDesk(this.deskList.get(random.nextInt(deskList.size())));
-        return stockItem;
-    }
+    // private StockItem updateStockItem(StockItem stockItem) {
+    //     Random random = new Random();
+    //     stockItem.setBuySellFlag(this.buySellFlagList.get(random.nextInt(buySellFlagList.size())));
+    //     stockItem.setScbDirection(this.buySellFlagList.get(random.nextInt(buySellFlagList.size())));
+    //     stockItem.setDesk(this.deskList.get(random.nextInt(deskList.size())));
+    //     return stockItem;
+    // }
 
     private String getRandomString(int i, Random random ) {
         

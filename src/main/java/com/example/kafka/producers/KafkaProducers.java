@@ -36,7 +36,6 @@ public class KafkaProducers implements IKafkaProducers{
 
     @Override
     public void sendToKafka(SparkResponse data) {
-        // TODO Auto-generated method stub
         CompletableFuture<SendResult<String, SparkResponse>> future = kafkaResponseTemplate.send("spark-channel", data);
         future.whenComplete((result, ex) -> {
             if (ex == null) {
